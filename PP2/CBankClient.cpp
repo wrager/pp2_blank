@@ -31,10 +31,17 @@ DWORD WINAPI CBankClient::ThreadFunction(LPVOID lpParam)
 
 unsigned int CBankClient::GetSleepDuration(CBankClient *client)
 {
-	// TODO: check correctness of running application with no sleep, even in CBank
+	// FIXTODO: check correctness of running application with no sleep, even in CBank
+
+	// Was
+	//		return (1000 + rand() % 3000) * (client->m_id + 1);
+	// Stand
+	//		if "* (client->m_id + 1)" had there then first client
+	//		constantly would update, time sleep = 0
 
 	// 1000 .. 3999
-	return (1000 + rand() % 3000) * (client->m_id + 1);
+	return (1000 + rand() % 3000);
+
 }
 
 
