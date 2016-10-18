@@ -7,12 +7,11 @@ CBank::CBank()
 }
 
 
-CBankClient* CBank::CreateClient()
+CBankClient * CBank::CreateClient()
 {
 	unsigned int clientId = m_clients.size();
-	CBankClient* client = new CBankClient(this, clientId);
-	m_clients.push_back(*client);
-	return client;
+	m_clients.push_back(CBankClient(this, clientId));
+	return &m_clients.back();
 }
 
 

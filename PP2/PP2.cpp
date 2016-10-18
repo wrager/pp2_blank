@@ -3,9 +3,11 @@
 #include "CBank.h"
 #include "CBankClient.h"
 
+using namespace std;
+
 int main()
 {
-	CBank* bank = new CBank();
+	shared_ptr<CBank> bank = make_shared<CBank>();
 	CBankClient* client1 = bank->CreateClient();
 	CBankClient* client2 = bank->CreateClient();
 
