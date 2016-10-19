@@ -53,8 +53,13 @@ int main(int argc, char * argv[])
 		}
 
 		shared_ptr<CBank> bank = make_shared<CBank>();
-		CBankClient* client1 = bank->CreateClient();
-		CBankClient* client2 = bank->CreateClient();
+
+		size_t amountClients = size_t(atoi(argv[1]));
+
+		for (size_t index = 0; index < amountClients; ++index)
+		{
+			bank->CreateClient();
+		}
 
 		// TODO: WaitForMultipleObjects
 		while (true)
