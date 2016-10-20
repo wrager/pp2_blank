@@ -24,10 +24,10 @@
     <ClInclude Include="targetver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="CBank.h">
+    <ClInclude Include="Bank.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="CBankClient.h">
+    <ClInclude Include="BankClient.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -38,10 +38,10 @@
     <ClCompile Include="PP2.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CBank.cpp">
+    <ClCompile Include="Bank.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CBankClient.cpp">
+    <ClCompile Include="BankClient.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

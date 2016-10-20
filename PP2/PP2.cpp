@@ -1,7 +1,6 @@
 #include "stdafx.h"
-#include <iostream>
-#include "CBank.h"
-#include "CBankClient.h"
+#include "Bank.h"
+#include "BankClient.h"
 
 int main()
 {
