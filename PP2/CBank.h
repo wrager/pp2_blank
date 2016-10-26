@@ -16,12 +16,14 @@ public:
 	CBankClient *					CreateClient();
 	void							UpdateClientBalance(CBankClient& client, int value);
 
-	void							CreateThreads();
+	void							CreateThreads(size_t amountCpu);
 private:
 	int								GetTotalBalance();
 	void							SetTotalBalance(int value);
 	void							SomeLongOperations();
 	unsigned int					GetSleepDuration();
+	static int						GetAffinityMask(size_t amountThread, size_t threadIndex);
+
 //////////////////////////////////////////////////////////////////////
 // Data
 private:

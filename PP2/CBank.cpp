@@ -40,11 +40,32 @@ void CBank::UpdateClientBalance(CBankClient &client, int value)
 	SetTotalBalance(totalBalance);
 }
 
-void CBank::CreateThreads()
+
+int CBank::GetAffinityMask(size_t amountThread, size_t threadIndex)
+{
+	int mask = 0x0000;
+
+	const size_t amountCpu = 2;// TODO : transfer to other place
+	if (amountThread / amountCpu == 0)
+	{
+		return 1;
+	}
+
+	int cpuIndex = (threadIndex) / (amountThread / amountCpu);
+	if ((amountThread % amountCpu == 1) && (cpuIndex > 0))
+	{
+		cpuIndex--;
+	}
+	return int(pow(2.f, cpuIndex));
+}
+
+void CBank::CreateThreads(size_t amountCpu)
 {
 	for (auto & client : m_clients)
 	{
-		m_threads.push_back(CreateThread(NULL, 0, &client.ThreadFunction, &client, 0, NULL));
+		m_threads.push_back(CreateThread(NULL, 0, &client.ThreadFunction, &client, CREATE_SUSPENDED, NULL));
+		SetThreadAffinityMask(m_threads.back(), GetAffinityMask(m_threads.size(), amountCpu));
+		ResumeThread(m_threads.back());
 	}
 
 	// ждем, пока все эти потоки завершатся
