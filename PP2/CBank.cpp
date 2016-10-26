@@ -44,10 +44,12 @@ void CBank::CreateThreads()
 {
 	for (auto & client : m_clients)
 	{
-		//CBankClient & lastClient = m_clients[m_clients.size() - 1];
 		m_threads.push_back(CreateThread(NULL, 0, &client.ThreadFunction, &client, 0, NULL));
-
 	}
+
+	// ждем, пока все эти потоки завершатся
+	WaitForMultipleObjects(m_threads.size(), m_threads.data(), TRUE, INFINITE);
+
 }
 
 
