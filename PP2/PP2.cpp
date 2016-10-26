@@ -61,7 +61,7 @@ int main(int argc, char * argv[])
 			bank->CreateClient();
 		}
 		bank->CreateThreads(2);
-		
+		bank->ResumeThreads();
 
 	}
 	catch (const std::exception & exception)

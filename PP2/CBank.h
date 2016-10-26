@@ -17,6 +17,7 @@ public:
 	void							UpdateClientBalance(CBankClient& client, int value);
 
 	void							CreateThreads(size_t amountCpu);
+	void							ResumeThreads();
 private:
 	int								GetTotalBalance();
 	void							SetTotalBalance(int value);

@@ -65,12 +65,20 @@ void CBank::CreateThreads(size_t amountCpu)
 	{
 		m_threads.push_back(CreateThread(NULL, 0, &client.ThreadFunction, &client, CREATE_SUSPENDED, NULL));
 		SetThreadAffinityMask(m_threads.back(), GetAffinityMask(m_threads.size(), amountCpu));
-		ResumeThread(m_threads.back());
+	}
+
+
+}
+
+void CBank::ResumeThreads()
+{
+	for (auto & thread : m_threads)
+	{
+		ResumeThread(thread);
 	}
 
 	// ждем, пока все эти потоки завершатся
 	WaitForMultipleObjects(m_threads.size(), m_threads.data(), TRUE, INFINITE);
-
 }
 
 
