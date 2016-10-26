@@ -5,8 +5,6 @@ CBankClient::CBankClient(CBank *bank, unsigned int id)
 {
 	m_bank = bank;
 	m_id = id;
-
-	CreateThread(NULL, 0, ThreadFunction, this, 0, NULL);
 }
 
 

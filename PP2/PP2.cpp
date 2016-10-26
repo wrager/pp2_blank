@@ -60,7 +60,7 @@ int main(int argc, char * argv[])
 		{
 			bank->CreateClient();
 		}
-
+		bank->CreateThreads();
 		// TODO: WaitForMultipleObjects
 		while (true)
 		{

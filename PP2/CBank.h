@@ -15,6 +15,8 @@ public:
 public:
 	CBankClient *					CreateClient();
 	void							UpdateClientBalance(CBankClient& client, int value);
+
+	void							CreateThreads();
 private:
 	int								GetTotalBalance();
 	void							SetTotalBalance(int value);
@@ -24,6 +26,7 @@ private:
 // Data
 private:
 	std::vector<CBankClient>		m_clients;
+	std::vector<HANDLE>				m_threads;
 	int								m_totalBalance;
 
 	

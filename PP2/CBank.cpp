@@ -12,6 +12,7 @@ CBankClient * CBank::CreateClient()
 {
 	unsigned int clientId = m_clients.size();
 	m_clients.push_back(CBankClient(this, clientId));
+
 	return &m_clients.back();
 }
 
@@ -37,6 +38,16 @@ void CBank::UpdateClientBalance(CBankClient &client, int value)
 	}
 
 	SetTotalBalance(totalBalance);
+}
+
+void CBank::CreateThreads()
+{
+	for (auto & client : m_clients)
+	{
+		//CBankClient & lastClient = m_clients[m_clients.size() - 1];
+		m_threads.push_back(CreateThread(NULL, 0, &client.ThreadFunction, &client, 0, NULL));
+
+	}
 }
 
 
