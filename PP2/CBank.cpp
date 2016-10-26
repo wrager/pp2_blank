@@ -1,4 +1,5 @@
 #include "CBank.h"
+#include "stdafx.h"
 
 CBank::CBank()
 {
@@ -51,5 +52,11 @@ void CBank::SetTotalBalance(int value)
 
 void CBank::SomeLongOperations()
 {
-	// TODO
+	Sleep(GetSleepDuration());
+}
+
+unsigned int CBank::GetSleepDuration()
+{
+	// -100 .. 100
+	return rand() % 201 - 100;
 }
