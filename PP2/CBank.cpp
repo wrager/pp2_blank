@@ -16,6 +16,15 @@ CBankClient * CBank::CreateClient()
 	return &m_clients.back();
 }
 
+void CBank::UpdateClientBalance(size_t index, int value)
+{
+	if (!IsBetween(index, size_t(0), m_clients.size() - 1))
+	{
+		throw std::runtime_error("Index more amount clients");
+	}
+	UpdateClientBalance(m_clients[index], value);
+}
+
 
 void CBank::UpdateClientBalance(CBankClient &client, int value)
 {

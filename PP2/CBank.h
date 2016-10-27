@@ -4,6 +4,14 @@
 #include <memory>
 #include "CBankClient.h"
 
+enum class idPrimitive
+{
+		CriticalSection = 0
+	,	Mutex
+	,	Semaphore
+	,	Event
+};
+
 class CBankClient;
 
 class CBank
@@ -14,6 +22,7 @@ public:
 // Methods
 public:
 	CBankClient *					CreateClient();
+	void							UpdateClientBalance(size_t index, int value);
 	void							UpdateClientBalance(CBankClient& client, int value);
 
 	void							CreateThreads(size_t amountCpu);
