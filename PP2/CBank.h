@@ -17,7 +17,7 @@ class CBankClient;
 class CBank
 {
 public:
-	CBank();
+	CBank(idPrimitive idPrimitiveType);
 	~CBank();
 //////////////////////////////////////////////////////////////////////
 // Methods
@@ -38,7 +38,13 @@ private:
 //////////////////////////////////////////////////////////////////////
 // Data
 private:
-	CRITICAL_SECTION				m_criticalSection;
+	union
+	{
+		CRITICAL_SECTION				m_criticalSection;
+
+	};
+	idPrimitive						m_idPrimitive;
+
 	std::vector<CBankClient>		m_clients;
 	std::vector<HANDLE>				m_threads;
 	int								m_totalBalance;

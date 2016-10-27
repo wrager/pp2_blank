@@ -1,17 +1,45 @@
 #include "CBank.h"
 #include "stdafx.h"
 
-CBank::CBank()
+CBank::CBank(idPrimitive idPrimitiveType)
 {
 	m_clients = std::vector<CBankClient>();
 	m_totalBalance = 0;
 
-	InitializeCriticalSection(&m_criticalSection);
+
+	m_idPrimitive = idPrimitiveType;
+	switch (m_idPrimitive)
+	{
+	case idPrimitive::CriticalSection:
+		InitializeCriticalSection(&m_criticalSection);
+		break;
+	case idPrimitive::Mutex:
+		break;
+	case idPrimitive::Semaphore:
+		break;
+	case idPrimitive::Event:
+		break;
+	default:
+		break;
+	}
 }
 
 CBank::~CBank()
 {
-	DeleteCriticalSection(&m_criticalSection);
+	switch (m_idPrimitive)
+	{
+	case idPrimitive::CriticalSection:
+		DeleteCriticalSection(&m_criticalSection);
+		break;
+	case idPrimitive::Mutex:
+		break;
+	case idPrimitive::Semaphore:
+		break;
+	case idPrimitive::Event:
+		break;
+	default:
+		break;
+	}
 }
 
 
