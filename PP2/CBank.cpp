@@ -14,6 +14,7 @@ CBank::CBank(idPrimitive idPrimitiveType)
 		InitializeCriticalSection(&m_criticalSection);
 		break;
 	case idPrimitive::Mutex:
+		m_hMutex = CreateMutex(NULL, false, NULL);
 		break;
 	case idPrimitive::Semaphore:
 		break;
@@ -32,6 +33,7 @@ CBank::~CBank()
 		DeleteCriticalSection(&m_criticalSection);
 		break;
 	case idPrimitive::Mutex:
+		CloseHandle(&m_hMutex);
 		break;
 	case idPrimitive::Semaphore:
 		break;
@@ -83,13 +85,12 @@ void CBank::UpdateClientBalance(CBankClient &client, int value)
 		return;
 	}
 
-	EnterCriticalSection(&m_criticalSection);
+	EnableSynchronizationPrimitive();
 
 	std::cout << "=== Removal of money ==="<< std::endl;
 	SetTotalBalance(totalBalance);
 
-	// ?? Только один поток
-	LeaveCriticalSection(&m_criticalSection);
+	DisableSynchronizationPrimitive();
 }
 
 
@@ -109,6 +110,45 @@ int CBank::GetAffinityMask(size_t amountThread, size_t threadIndex)
 		cpuIndex--;
 	}
 	return int(pow(2.f, cpuIndex));
+}
+
+void CBank::EnableSynchronizationPrimitive()
+{
+	switch (m_idPrimitive)
+	{
+	case idPrimitive::CriticalSection:
+		EnterCriticalSection(&m_criticalSection);
+		break;
+	case idPrimitive::Mutex:
+		WaitForSingleObject(m_hMutex, INFINITE);
+		break;
+	case idPrimitive::Semaphore:
+		break;
+	case idPrimitive::Event:
+		break;
+	default:
+		break;
+	}
+}
+
+void CBank::DisableSynchronizationPrimitive()
+{
+	switch (m_idPrimitive)
+	{
+	case idPrimitive::CriticalSection:
+		LeaveCriticalSection(&m_criticalSection);
+		break;
+	case idPrimitive::Mutex:
+		ReleaseMutex(m_hMutex);
+		break;
+	case idPrimitive::Semaphore:
+		break;
+	case idPrimitive::Event:
+		break;
+	default:
+		break;
+	}
+
 }
 
 void CBank::CreateThreads(size_t amountCpu)

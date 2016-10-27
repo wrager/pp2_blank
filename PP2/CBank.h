@@ -35,12 +35,16 @@ private:
 	unsigned int					GetSleepDuration();
 	static int						GetAffinityMask(size_t amountThread, size_t threadIndex);
 
+	void							EnableSynchronizationPrimitive();
+	void							DisableSynchronizationPrimitive();
+
 //////////////////////////////////////////////////////////////////////
 // Data
 private:
 	union
 	{
 		CRITICAL_SECTION				m_criticalSection;
+		HANDLE							m_hMutex;
 
 	};
 	idPrimitive						m_idPrimitive;
