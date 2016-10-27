@@ -18,6 +18,7 @@ class CBank
 {
 public:
 	CBank();
+	~CBank();
 //////////////////////////////////////////////////////////////////////
 // Methods
 public:
@@ -37,6 +38,7 @@ private:
 //////////////////////////////////////////////////////////////////////
 // Data
 private:
+	CRITICAL_SECTION				m_criticalSection;
 	std::vector<CBankClient>		m_clients;
 	std::vector<HANDLE>				m_threads;
 	int								m_totalBalance;

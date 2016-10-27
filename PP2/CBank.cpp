@@ -5,6 +5,13 @@ CBank::CBank()
 {
 	m_clients = std::vector<CBankClient>();
 	m_totalBalance = 0;
+
+	InitializeCriticalSection(&m_criticalSection);
+}
+
+CBank::~CBank()
+{
+	DeleteCriticalSection(&m_criticalSection);
 }
 
 
@@ -28,15 +35,16 @@ void CBank::UpdateClientBalance(size_t index, int value)
 
 void CBank::UpdateClientBalance(CBankClient &client, int value)
 {
+
 	int totalBalance = GetTotalBalance();
-	std::cout << "Client " << client.GetId() << " initiates reading total balance. Total = " << totalBalance << "." << std::endl;
+	std::cout << "Client " << client.GetId() << ". Total = " << totalBalance << "." << std::endl;
 
 	SomeLongOperations();
 	totalBalance += value;
 
 	std::cout
-		<< "Client " << client.GetId() << " updates his balance with " << value
-		<< " and initiates setting total balance to " << totalBalance
+		<< " Value = " << value
+		<< " and balance will " << totalBalance
 		<< ". Must be: " << GetTotalBalance() + value << "." << std::endl;
 
 	// Balance not must be less zero
@@ -44,9 +52,16 @@ void CBank::UpdateClientBalance(CBankClient &client, int value)
 	{
 		std::cout << "! ERROR !" << std::endl;
 		std::cout << "totalBalance < GetTotalBalance() " << std::endl;// TODO : fix message
+		return;
 	}
 
+	EnterCriticalSection(&m_criticalSection);
+
+	std::cout << "=== Removal of money ==="<< std::endl;
 	SetTotalBalance(totalBalance);
+
+	// ?? Только один поток
+	LeaveCriticalSection(&m_criticalSection);
 }
 
 
