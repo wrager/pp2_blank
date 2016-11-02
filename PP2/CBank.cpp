@@ -17,6 +17,7 @@ CBank::CBank(idPrimitive idPrimitiveType)
 		m_hMutex = CreateMutex(NULL, false, NULL);
 		break;
 	case idPrimitive::Semaphore:
+		m_hSemaphore = CreateSemaphore(NULL, 1, 1, NULL);
 		break;
 	case idPrimitive::Event:
 		break;
@@ -36,6 +37,7 @@ CBank::~CBank()
 		CloseHandle(&m_hMutex);
 		break;
 	case idPrimitive::Semaphore:
+		CloseHandle(&m_hSemaphore);
 		break;
 	case idPrimitive::Event:
 		break;
@@ -123,6 +125,7 @@ void CBank::EnableSynchronizationPrimitive()
 		WaitForSingleObject(m_hMutex, INFINITE);
 		break;
 	case idPrimitive::Semaphore:
+		WaitForSingleObject(m_hSemaphore, INFINITE);
 		break;
 	case idPrimitive::Event:
 		break;
@@ -142,6 +145,7 @@ void CBank::DisableSynchronizationPrimitive()
 		ReleaseMutex(m_hMutex);
 		break;
 	case idPrimitive::Semaphore:
+		ReleaseSemaphore(m_hSemaphore, 1, NULL);
 		break;
 	case idPrimitive::Event:
 		break;
