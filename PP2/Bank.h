@@ -10,9 +10,11 @@ public:
 	CBank();
 	std::shared_ptr<CBankClient> CreateClient();
 	void UpdateClientBalance(CBankClient& client, int value);
+	DWORD WaitForThreadsComplited();
 
 private:
 	std::vector<CBankClient> m_clients;
+	std::vector<HANDLE>	m_threads;
 	int m_totalBalance;
 
 	int GetTotalBalance();

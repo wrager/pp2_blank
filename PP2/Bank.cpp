@@ -7,6 +7,7 @@ using namespace std;
 CBank::CBank()
 	: m_clients()
 	, m_totalBalance(0)
+	, m_threads()
 {
 }
 
@@ -16,6 +17,7 @@ shared_ptr<CBankClient> CBank::CreateClient()
 	unsigned clientId = unsigned(m_clients.size());
 	shared_ptr<CBankClient> client = make_shared<CBankClient>(this, clientId);
 	m_clients.push_back(*client);
+	m_threads.emplace_back(CreateThread(NULL, 0, &client->ThreadFunction, &*client, 0, NULL));
 	return client;
 }
 
@@ -42,6 +44,11 @@ void CBank::UpdateClientBalance(CBankClient &client, int value)
 	{ 
 		SetTotalBalance(totalBalance);
 	}
+}
+
+DWORD CBank::WaitForThreadsComplited()
+{
+	return WaitForMultipleObjects(m_threads.size(), m_threads.data(), TRUE, INFINITE);
 }
 
 
