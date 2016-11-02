@@ -101,7 +101,11 @@ void CBank::UpdateClientBalance(CBankClient &client, int value)
 	// Balance not must be less zero
 	if (totalBalance < 0)
 	{
+		std::cout << "==================================" << std::endl;
 		std::cout << "! ERROR !" << std::endl;
+		std::cout << "Balance = " << GetTotalBalance() << std::endl;
+		std::cout << "Value = " << value << std::endl;
+		std::cout << "Set Value = " << totalBalance << std::endl;
 		std::cout << "Balance not must be less zero!!!" << std::endl;
 		return;
 	}
