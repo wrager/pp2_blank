@@ -1,18 +1,20 @@
+#include "stdafx.h"
 #include "Bank.h"
 
 const float SLEEP_TIME = 4.f;
+using namespace std;
 
 CBank::CBank()
+	: m_clients()
+	, m_totalBalance(0)
 {
-	m_clients = std::vector<CBankClient>();
-	m_totalBalance = 0;
 }
 
 
-CBankClient* CBank::CreateClient()
+shared_ptr<CBankClient> CBank::CreateClient()
 {
 	unsigned clientId = unsigned(m_clients.size());
-	CBankClient* client = new CBankClient(this, clientId);
+	shared_ptr<CBankClient> client = make_shared<CBankClient>(this, clientId);
 	m_clients.push_back(*client);
 	return client;
 }
