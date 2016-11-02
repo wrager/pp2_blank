@@ -102,7 +102,7 @@ void CBank::UpdateClientBalance(CBankClient &client, int value)
 	if (totalBalance < 0)
 	{
 		std::cout << "! ERROR !" << std::endl;
-		std::cout << "totalBalance < GetTotalBalance() " << std::endl;// TODO : fix message
+		std::cout << "Balance not must be less zero!!!" << std::endl;
 		return;
 	}
 
@@ -119,14 +119,13 @@ int CBank::GetAffinityMask(size_t amountThread, size_t threadIndex)
 {
 	int mask = 0x0000;
 
-	const size_t amountCpu = 2;// TODO : transfer to other place
-	if (amountThread / amountCpu == 0)
+	if (amountThread / m_amountCpu == 0)
 	{
 		return 1;
 	}
 
-	int cpuIndex = (threadIndex) / (amountThread / amountCpu);
-	if ((amountThread % amountCpu == 1) && (cpuIndex > 0))
+	int cpuIndex = (threadIndex) / (amountThread / m_amountCpu);
+	if ((amountThread % m_amountCpu == 1) && (cpuIndex > 0))
 	{
 		cpuIndex--;
 	}
@@ -178,13 +177,13 @@ void CBank::DisableSynchronizationPrimitive()
 
 void CBank::CreateThreads(size_t amountCpu)
 {
-	for (auto & client : m_clients)
+	m_amountCpu = amountCpu;
+	for (size_t index = 0; index < m_clients.size(); ++index)
 	{
+		auto & client = m_clients[index];
 		m_threads.push_back(CreateThread(NULL, 0, &client.ThreadFunction, &client, CREATE_SUSPENDED, NULL));
-		SetThreadAffinityMask(m_threads.back(), GetAffinityMask(m_threads.size(), amountCpu));
+		SetThreadAffinityMask(m_threads.back(), GetAffinityMask(m_clients.size(), index));
 	}
-
-
 }
 
 void CBank::ResumeThreads()

@@ -33,7 +33,7 @@ private:
 	void							SetTotalBalance(int value);
 	void							SomeLongOperations();
 	unsigned int					GetSleepDuration();
-	static int						GetAffinityMask(size_t amountThread, size_t threadIndex);
+	int								GetAffinityMask(size_t amountThread, size_t threadIndex);
 
 	void							EnableSynchronizationPrimitive();
 	void							DisableSynchronizationPrimitive();
@@ -50,6 +50,7 @@ private:
 	};
 	idPrimitive						m_idPrimitive;
 
+	size_t							m_amountCpu = 1;
 	std::vector<CBankClient>		m_clients;
 	std::vector<HANDLE>				m_threads;
 	int								m_totalBalance;

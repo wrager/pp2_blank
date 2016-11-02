@@ -87,16 +87,16 @@ int main(int argc, char * argv[])
 
 		idPrimitive runtime = CheckRuntimeParametr(argc, argv);
 
-		shared_ptr<CBank> bank = make_shared<CBank>(runtime);
+		CBank bank(runtime);
 
 		size_t amountClients = size_t(atoi(argv[1]));
 
 		for (size_t index = 0; index < amountClients; ++index)
 		{
-			bank->CreateClient();
+			bank.CreateClient();
 		}
-		bank->CreateThreads(2);
-		bank->ResumeThreads();
+		bank.CreateThreads(2);
+		bank.ResumeThreads();
 
 	}
 	catch (const std::exception & exception)
