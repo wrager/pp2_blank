@@ -13,13 +13,30 @@ CBank::CBank(idPrimitive idPrimitiveType)
 	case idPrimitive::CriticalSection:
 		InitializeCriticalSection(&m_criticalSection);
 		break;
+		// @param first parametr - SECURITY_ATTRIBUTE
 	case idPrimitive::Mutex:
 		m_hMutex = CreateMutex(NULL, false, NULL);
 		break;
 	case idPrimitive::Semaphore:
+		// second and third - range amount active thread
 		m_hSemaphore = CreateSemaphore(NULL, 1, 1, NULL);
 		break;
 	case idPrimitive::Event:
+		/*
+		bManualReset
+
+		If this parameter is TRUE, the function creates a manual-reset
+		event object, which requires the use of the ResetEvent function 
+		to set the event state to nonsignaled. If this parameter is
+		FALSE, the function creates an auto-reset event object, and 
+		system automatically resets the event state to nonsignaled
+		after a single waiting thread has been released.
+
+		bInitialState
+
+		If this parameter is TRUE, the initial state of the event
+		object is signaled; otherwise, it is nonsignaled.
+		*/
 		m_hEvent = CreateEvent(NULL, true , false, NULL);
 		break;
 	default:
