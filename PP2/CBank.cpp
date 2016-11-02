@@ -1,5 +1,7 @@
 #include "CBank.h"
 
+const float SLEEP_TIME = 4.f;
+
 CBank::CBank()
 {
 	m_clients = std::vector<CBankClient>();
@@ -51,5 +53,6 @@ void CBank::SetTotalBalance(int value)
 
 void CBank::SomeLongOperations()
 {
-	// TODO
+	//fixed TODO
+	Sleep(SLEEP_TIME);
 }
