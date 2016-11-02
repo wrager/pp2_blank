@@ -6,10 +6,10 @@ class CBank;
 class CBankClient
 {
 public:
+	CBankClient(CBank *bank, unsigned id);
 	unsigned GetId();
 
 private:
-	CBankClient(CBank *bank, unsigned id);
 	static unsigned GetSleepDuration(CBankClient *client);
 	static unsigned GetBalanceChangeValue();
 	static DWORD WINAPI ThreadFunction(LPVOID lpParam);
