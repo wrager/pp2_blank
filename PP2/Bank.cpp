@@ -1,4 +1,4 @@
-#include "CBank.h"
+#include "Bank.h"
 
 const float SLEEP_TIME = 4.f;
 
@@ -11,7 +11,7 @@ CBank::CBank()
 
 CBankClient* CBank::CreateClient()
 {
-	unsigned int clientId = m_clients.size();
+	unsigned clientId = unsigned(m_clients.size());
 	CBankClient* client = new CBankClient(this, clientId);
 	m_clients.push_back(*client);
 	return client;
