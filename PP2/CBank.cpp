@@ -20,6 +20,7 @@ CBank::CBank(idPrimitive idPrimitiveType)
 		m_hSemaphore = CreateSemaphore(NULL, 1, 1, NULL);
 		break;
 	case idPrimitive::Event:
+		m_hEvent = CreateEvent(NULL, true , false, NULL);
 		break;
 	default:
 		break;
@@ -40,6 +41,7 @@ CBank::~CBank()
 		CloseHandle(&m_hSemaphore);
 		break;
 	case idPrimitive::Event:
+		CloseHandle(&m_hEvent);
 		break;
 	default:
 		break;
@@ -128,6 +130,7 @@ void CBank::EnableSynchronizationPrimitive()
 		WaitForSingleObject(m_hSemaphore, INFINITE);
 		break;
 	case idPrimitive::Event:
+		SetEvent(m_hEvent);
 		break;
 	default:
 		break;
@@ -148,6 +151,7 @@ void CBank::DisableSynchronizationPrimitive()
 		ReleaseSemaphore(m_hSemaphore, 1, NULL);
 		break;
 	case idPrimitive::Event:
+		ResetEvent(m_hEvent);
 		break;
 	default:
 		break;

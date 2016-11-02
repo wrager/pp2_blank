@@ -46,8 +46,7 @@ private:
 		CRITICAL_SECTION				m_criticalSection;
 		HANDLE							m_hMutex;
 		HANDLE							m_hSemaphore;
-
-
+		HANDLE							m_hEvent;
 	};
 	idPrimitive						m_idPrimitive;
 
