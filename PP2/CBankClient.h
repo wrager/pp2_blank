@@ -14,7 +14,7 @@ private:
 
 	CBankClient(CBank *bank, unsigned int id);
 	static unsigned int GetSleepDuration(CBankClient *client);
-	static unsigned int GetBalanceChangeValue();
+	unsigned int GetBalanceChangeValue();
 	static DWORD WINAPI ThreadFunction(LPVOID lpParam);
 	static DWORD WINAPI ThreadErrorFunction(LPVOID lpParam);// Special function for testing
 

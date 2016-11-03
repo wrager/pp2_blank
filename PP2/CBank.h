@@ -28,8 +28,10 @@ public:
 
 	void							CreateThreads(size_t amountCpu);
 	void							ResumeThreads();
-private:
+
 	int								GetTotalBalance();
+
+private:
 	void							SetTotalBalance(int value);
 	void							SomeLongOperations();
 	unsigned int					GetSleepDuration();
@@ -53,7 +55,7 @@ private:
 	size_t							m_amountCpu = 1;
 	std::vector<CBankClient>		m_clients;
 	std::vector<HANDLE>				m_threads;
-	int								m_totalBalance;
+	int								m_totalBalance = 100;
 
 	
 };

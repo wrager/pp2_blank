@@ -21,7 +21,7 @@ DWORD WINAPI CBankClient::ThreadFunction(LPVOID lpParam)
 	while (true)
 	{
 		Sleep(GetSleepDuration(client));
-		client->m_bank->UpdateClientBalance(*client, GetBalanceChangeValue());
+		client->m_bank->UpdateClientBalance(*client, client->GetBalanceChangeValue());
 	}
 	return 0;
 }
@@ -29,9 +29,10 @@ DWORD WINAPI CBankClient::ThreadFunction(LPVOID lpParam)
 DWORD CBankClient::ThreadErrorFunction(LPVOID lpParam)
 {
 	CBankClient *client = (CBankClient*)lpParam;
-	
-	client->m_bank->UpdateClientBalance(*client, -90);
-	
+	while (true)
+	{
+		client->m_bank->UpdateClientBalance(*client, -90);
+	}
 	return 0;
 }
 
@@ -45,5 +46,6 @@ unsigned int CBankClient::GetSleepDuration(CBankClient *client)
 unsigned int CBankClient::GetBalanceChangeValue()
 {
 	// -100 .. 100
-	return rand() % 201 - 100;
+	//% 201 - 100;
+	return -rand() % (m_bank->GetTotalBalance() + 1 + 50) + 50;
 }

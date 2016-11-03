@@ -3,10 +3,6 @@
 
 CBank::CBank(idPrimitive idPrimitiveType)
 {
-	m_clients = std::vector<CBankClient>();
-	m_totalBalance = 0;
-
-
 	m_idPrimitive = idPrimitiveType;
 	switch (m_idPrimitive)
 	{
@@ -15,6 +11,7 @@ CBank::CBank(idPrimitive idPrimitiveType)
 		break;
 		// @param first parametr - SECURITY_ATTRIBUTE
 	case idPrimitive::Mutex:
+		// second parametr -  thread use the mutex 
 		m_hMutex = CreateMutex(NULL, false, NULL);
 		break;
 	case idPrimitive::Semaphore:
@@ -37,7 +34,7 @@ CBank::CBank(idPrimitive idPrimitiveType)
 		If this parameter is TRUE, the initial state of the event
 		object is signaled; otherwise, it is nonsignaled.
 		*/
-		m_hEvent = CreateEvent(NULL, true , false, NULL);
+		m_hEvent = CreateEvent(NULL, false , false, NULL);
 		break;
 	default:
 		break;
@@ -90,7 +87,7 @@ void CBank::UpdateClientBalance(CBankClient &client, int value)
 	int totalBalance = GetTotalBalance();
 	std::cout << "Client " << client.GetId() << ". Total = " << totalBalance << "." << std::endl;
 
-	SomeLongOperations();
+	//SomeLongOperations();
 	totalBalance += value;
 
 	std::cout
@@ -110,12 +107,12 @@ void CBank::UpdateClientBalance(CBankClient &client, int value)
 		return;
 	}
 
-	EnableSynchronizationPrimitive();
+	//EnableSynchronizationPrimitive();
 
 	std::cout << "=== Removal of money ==="<< std::endl;
 	SetTotalBalance(totalBalance);
 
-	DisableSynchronizationPrimitive();
+	//DisableSynchronizationPrimitive();
 }
 
 
@@ -184,8 +181,8 @@ void CBank::CreateThreads(size_t amountCpu)
 	m_amountCpu = amountCpu;
 	for (size_t index = 0; index < m_clients.size(); ++index)
 	{
-		auto & client = m_clients[index];
-		m_threads.push_back(CreateThread(NULL, 0, &client.ThreadFunction, &client, CREATE_SUSPENDED, NULL));
+		auto & client = m_clients[index];//ThreadFunction
+		m_threads.push_back(CreateThread(NULL, 0, &client.ThreadErrorFunction, &client, CREATE_SUSPENDED, NULL));
 		SetThreadAffinityMask(m_threads.back(), GetAffinityMask(m_clients.size(), index));
 	}
 }
@@ -194,6 +191,8 @@ void CBank::ResumeThreads()
 {
 	for (auto & thread : m_threads)
 	{
+		SetThreadPriority(thread, THREAD_PRIORITY_NORMAL);
+
 		ResumeThread(thread);
 	}
 
