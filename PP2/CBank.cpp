@@ -87,6 +87,7 @@ void CBank::UpdateClientBalance(CBankClient &client, int value)
 	int totalBalance = GetTotalBalance();
 	std::cout << "Client " << client.GetId() << ". Total = " << totalBalance << "." << std::endl;
 
+	
 	//SomeLongOperations();
 	totalBalance += value;
 
@@ -109,7 +110,7 @@ void CBank::UpdateClientBalance(CBankClient &client, int value)
 
 	//EnableSynchronizationPrimitive();
 
-	std::cout << "=== Removal of money ==="<< std::endl;
+	std::cout << "=== Removal of money ===" << std::endl;
 	SetTotalBalance(totalBalance);
 
 	//DisableSynchronizationPrimitive();
@@ -191,11 +192,8 @@ void CBank::ResumeThreads()
 {
 	for (auto & thread : m_threads)
 	{
-		SetThreadPriority(thread, THREAD_PRIORITY_NORMAL);
-
 		ResumeThread(thread);
 	}
-
 	// ждем, пока все эти потоки завершатся
 	WaitForMultipleObjects(m_threads.size(), m_threads.data(), TRUE, INFINITE);
 }

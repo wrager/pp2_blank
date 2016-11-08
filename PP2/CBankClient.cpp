@@ -31,6 +31,7 @@ DWORD CBankClient::ThreadErrorFunction(LPVOID lpParam)
 	CBankClient *client = (CBankClient*)lpParam;
 	while (true)
 	{
+		//Sleep(GetSleepDuration(client));
 		client->m_bank->UpdateClientBalance(*client, -90);
 	}
 	return 0;
