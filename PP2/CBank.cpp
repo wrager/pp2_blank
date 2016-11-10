@@ -83,6 +83,7 @@ void CBank::UpdateClientBalance(size_t index, int value)
 
 void CBank::UpdateClientBalance(CBankClient &client, int value)
 {
+	EnableSynchronizationPrimitive();
 
 	int totalBalance = GetTotalBalance();
 	std::cout << "Client " << client.GetId() << ". Total = " << totalBalance << "." << std::endl;
@@ -109,12 +110,12 @@ void CBank::UpdateClientBalance(CBankClient &client, int value)
 		return;
 	}
 
-	//EnableSynchronizationPrimitive();
-	Sleep(client.m_id);
+	
+	//Sleep(client.m_id);
 	std::cout << "=== Removal of money === Client " << client.m_id << std::endl;
 	UpdateTotalBalance(value);
 
-	//DisableSynchronizationPrimitive();
+	DisableSynchronizationPrimitive();
 }
 
 
@@ -184,7 +185,7 @@ void CBank::CreateThreads(size_t amountCpu)
 	for (size_t index = 0; index < m_clients.size(); ++index)
 	{
 		auto & client = m_clients[index];//ThreadFunction
-		m_threads.push_back(CreateThread(NULL, 0, &client.ThreadErrorFunction, &client, CREATE_SUSPENDED, NULL));
+		m_threads.push_back(CreateThread(NULL, 0, &client.ThreadFunction, &client, CREATE_SUSPENDED, NULL));
 		SetThreadAffinityMask(m_threads.back(), GetAffinityMask(m_clients.size(), index));
 	}
 }
