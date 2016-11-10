@@ -96,22 +96,23 @@ void CBank::UpdateClientBalance(CBankClient &client, int value)
 		<< " and balance will " << totalBalance
 		<< ". Must be: " << GetTotalBalance() + value << "." << std::endl;
 
+	std::cout << "Check ! Client " << client.m_id << std::endl;
 	// Balance not must be less zero
 	if (totalBalance < 0)
 	{
 		std::cout << "==================================" << std::endl;
-		std::cout << "! ERROR !" << std::endl;
+		std::cout << "! ERROR ! Client " << client.m_id << std::endl;
 		std::cout << "Balance = " << GetTotalBalance() << std::endl;
 		std::cout << "Value = " << value << std::endl;
-		std::cout << "Set Value = " << totalBalance << std::endl;
+		std::cout << "Set Value = " << totalBalance + value << std::endl;
 		std::cout << "Balance not must be less zero!!!" << std::endl;
 		return;
 	}
 
 	//EnableSynchronizationPrimitive();
-
-	std::cout << "=== Removal of money ===" << std::endl;
-	SetTotalBalance(totalBalance);
+	Sleep(client.m_id);
+	std::cout << "=== Removal of money === Client " << client.m_id << std::endl;
+	UpdateTotalBalance(value);
 
 	//DisableSynchronizationPrimitive();
 }
@@ -205,9 +206,9 @@ int CBank::GetTotalBalance()
 }
 
 
-void CBank::SetTotalBalance(int value)
+void CBank::UpdateTotalBalance(int value)
 {
-	m_totalBalance = value;
+	m_totalBalance += value;
 }
 
 void CBank::SomeLongOperations()

@@ -32,7 +32,7 @@ public:
 	int								GetTotalBalance();
 
 private:
-	void							SetTotalBalance(int value);
+	void							UpdateTotalBalance(int value);
 	void							SomeLongOperations();
 	unsigned int					GetSleepDuration();
 	int								GetAffinityMask(size_t amountThread, size_t threadIndex);
