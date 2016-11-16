@@ -108,7 +108,7 @@ void CBank::UpdateClientBalance(CBankClient &client, int value)
 			std::cout << "! ERROR ! Client " << client.m_id << std::endl;
 			std::cout << "Balance = " << GetTotalBalance() << std::endl;
 			std::cout << "Value = " << value << std::endl;
-			std::cout << "Set Value = " << totalBalance + value << std::endl;
+			std::cout << "Set Value = " << totalBalance << std::endl;
 			std::cout << "Balance not must be less zero!!!" << std::endl;
 			DisableSynchronizationPrimitive();
 			return;
@@ -166,7 +166,7 @@ bool CBank::EnableSynchronizationPrimitive(CBankClient &client)
 		}
 		WaitForSingleObject(m_pauseEvent, INFINITE);
 		return false;
-		
+		//return true;
 		break;
 	default:
 		return false;
