@@ -34,7 +34,8 @@ CBank::CBank(idPrimitive idPrimitiveType)
 		If this parameter is TRUE, the initial state of the event
 		object is signaled; otherwise, it is nonsignaled.
 		*/
-		m_hEvent = CreateEvent(NULL, false , false, NULL);
+		m_hEvent = CreateEvent(NULL, true , true, NULL);
+		m_pauseEvent = CreateEvent(NULL, false, false, NULL);
 		break;
 	default:
 		break;
@@ -55,6 +56,7 @@ CBank::~CBank()
 		CloseHandle(&m_hSemaphore);
 		break;
 	case idPrimitive::Event:
+		CloseHandle(&m_pauseEvent);
 		CloseHandle(&m_hEvent);
 		break;
 	default:
@@ -83,39 +85,43 @@ void CBank::UpdateClientBalance(size_t index, int value)
 
 void CBank::UpdateClientBalance(CBankClient &client, int value)
 {
-	EnableSynchronizationPrimitive();
-
-	int totalBalance = GetTotalBalance();
-	std::cout << "Client " << client.GetId() << ". Total = " << totalBalance << "." << std::endl;
-
-	
-	//SomeLongOperations();
-	totalBalance += value;
-
-	std::cout
-		<< " Value = " << value
-		<< " and balance will " << totalBalance
-		<< ". Must be: " << GetTotalBalance() + value << "." << std::endl;
-
-	std::cout << "Check ! Client " << client.m_id << std::endl;
-	// Balance not must be less zero
-	if (totalBalance < 0)
+	if(EnableSynchronizationPrimitive(client))
 	{
-		std::cout << "==================================" << std::endl;
-		std::cout << "! ERROR ! Client " << client.m_id << std::endl;
-		std::cout << "Balance = " << GetTotalBalance() << std::endl;
-		std::cout << "Value = " << value << std::endl;
-		std::cout << "Set Value = " << totalBalance + value << std::endl;
-		std::cout << "Balance not must be less zero!!!" << std::endl;
-		return;
+
+		int totalBalance = GetTotalBalance();
+		std::cout << "Client " << client.GetId() << ". Total = " << totalBalance << "." << std::endl;
+
+
+		//SomeLongOperations();
+		totalBalance += value;
+
+		std::cout
+			<< " Value = " << value
+			<< " and balance will " << totalBalance
+			<< ". Must be: " << GetTotalBalance() + value << "." << std::endl;
+
+		std::cout << "Check ! Client " << client.m_id << std::endl;
+		// Balance not must be less zero
+		if (totalBalance < 0)
+		{
+			std::cout << "==================================" << std::endl;
+			std::cout << "! ERROR ! Client " << client.m_id << std::endl;
+			std::cout << "Balance = " << GetTotalBalance() << std::endl;
+			std::cout << "Value = " << value << std::endl;
+			std::cout << "Set Value = " << totalBalance + value << std::endl;
+			std::cout << "Balance not must be less zero!!!" << std::endl;
+			DisableSynchronizationPrimitive();
+			return;
+		}
+
+
+		Sleep(client.m_id);
+		std::cout << "=== Removal of money === Client " << client.m_id << std::endl;
+		UpdateTotalBalance(value);
+
+		DisableSynchronizationPrimitive();
 	}
 
-	
-	//Sleep(client.m_id);
-	std::cout << "=== Removal of money === Client " << client.m_id << std::endl;
-	UpdateTotalBalance(value);
-
-	DisableSynchronizationPrimitive();
 }
 
 
@@ -136,23 +142,34 @@ int CBank::GetAffinityMask(size_t amountThread, size_t threadIndex)
 	return int(pow(2.f, cpuIndex));
 }
 
-void CBank::EnableSynchronizationPrimitive()
+bool CBank::EnableSynchronizationPrimitive(CBankClient &client)
 {
 	switch (m_idPrimitive)
 	{
 	case idPrimitive::CriticalSection:
 		EnterCriticalSection(&m_criticalSection);
+		return true;
 		break;
 	case idPrimitive::Mutex:
 		WaitForSingleObject(m_hMutex, INFINITE);
+		return true;
 		break;
 	case idPrimitive::Semaphore:
 		WaitForSingleObject(m_hSemaphore, INFINITE);
+		return true;
 		break;
 	case idPrimitive::Event:
-		SetEvent(m_hEvent);
+		if (&m_clients[m_randomIndex] == &client)
+		{
+			SetEvent(m_hEvent);
+			return true;
+		}
+		WaitForSingleObject(m_pauseEvent, INFINITE);
+		return false;
+		
 		break;
 	default:
+		return false;
 		break;
 	}
 }
@@ -171,7 +188,11 @@ void CBank::DisableSynchronizationPrimitive()
 		ReleaseSemaphore(m_hSemaphore, 1, NULL);
 		break;
 	case idPrimitive::Event:
+		m_randomIndex = size_t(rand() % m_threads.size());
+
 		ResetEvent(m_hEvent);
+
+		SetEvent(m_pauseEvent);
 		break;
 	default:
 		break;
@@ -185,13 +206,15 @@ void CBank::CreateThreads(size_t amountCpu)
 	for (size_t index = 0; index < m_clients.size(); ++index)
 	{
 		auto & client = m_clients[index];//ThreadFunction
-		m_threads.push_back(CreateThread(NULL, 0, &client.ThreadFunction, &client, CREATE_SUSPENDED, NULL));
+		m_threads.push_back(CreateThread(NULL, 0, &client.ThreadErrorFunction, &client, CREATE_SUSPENDED, NULL));
 		SetThreadAffinityMask(m_threads.back(), GetAffinityMask(m_clients.size(), index));
 	}
 }
 
 void CBank::ResumeThreads()
 {
+	m_isUpdate = true;
+	m_randomIndex = size_t(rand() % m_threads.size());
 	for (auto & thread : m_threads)
 	{
 		ResumeThread(thread);

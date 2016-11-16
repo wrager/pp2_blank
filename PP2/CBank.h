@@ -37,7 +37,7 @@ private:
 	unsigned int					GetSleepDuration();
 	int								GetAffinityMask(size_t amountThread, size_t threadIndex);
 
-	void							EnableSynchronizationPrimitive();
+	bool							EnableSynchronizationPrimitive(CBankClient &client);
 	void							DisableSynchronizationPrimitive();
 
 //////////////////////////////////////////////////////////////////////
@@ -51,11 +51,15 @@ private:
 		HANDLE							m_hEvent;
 	};
 	idPrimitive						m_idPrimitive;
+	HANDLE							m_pauseEvent;
 
 	size_t							m_amountCpu = 1;
 	std::vector<CBankClient>		m_clients;
 	std::vector<HANDLE>				m_threads;
 	int								m_totalBalance = 100;
+
+	bool							m_isUpdate = false;
+	size_t							m_randomIndex = 0;
 
 	
 };
