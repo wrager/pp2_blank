@@ -1,4 +1,13 @@
 #include "Bank.h"
+#include "SyncPrimitives.h"
+
+CBank::CBank(TypeSyncPrimitives type)
+{
+	m_syncPrimitives = new SyncPrimitives();
+	m_syncPrimitives->type = type;
+	m_clients = std::vector<CBankClient>();
+	m_totalBalance = 0;
+}
 
 CBank::CBank()
 {
@@ -9,8 +18,8 @@ CBank::CBank()
 
 CBankClient* CBank::CreateClient()
 {
-	unsigned clientId = unsigned(m_clients.size());
-	CBankClient* client = new CBankClient(this, clientId);
+	unsigned clientId = static_cast<unsigned>(m_clients.size());
+	CBankClient* client = new CBankClient(this, clientId, m_syncPrimitives);
 	m_clients.push_back(*client);
 	return client;
 }
@@ -22,19 +31,22 @@ void CBank::UpdateClientBalance(CBankClient &client, int value)
 	std::cout << "Client " << client.GetId() << " initiates reading total balance. Total = " << totalBalance << "." << std::endl;
 	
 	SomeLongOperations();
-	totalBalance += value;
 
 	std::cout
 		<< "Client " << client.GetId() << " updates his balance with " << value
 		<< " and initiates setting total balance to " << totalBalance
-		<< ". Must be: " << GetTotalBalance() + value << "." << std::endl;
+		<< ". Must be: " << totalBalance + value << "." << std::endl;
 
 	// Check correctness of transaction through actual total balance
-	if (totalBalance != GetTotalBalance() + value) {
+	if (totalBalance + value > 0)
+	{
+		SetTotalBalance(totalBalance + value);
+		std::cout << "Total Balance = " << GetTotalBalance() << std::endl;
+	}
+	if (totalBalance != GetTotalBalance() - value) {
 		std::cout << "! ERROR !" << std::endl;
 	}
 
-	SetTotalBalance(totalBalance);
 }
 
 
