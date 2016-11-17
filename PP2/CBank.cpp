@@ -166,7 +166,6 @@ bool CBank::EnableSynchronizationPrimitive(CBankClient &client)
 		}
 		WaitForSingleObject(m_pauseEvent, INFINITE);
 		return false;
-		//return true;
 		break;
 	default:
 		return false;
