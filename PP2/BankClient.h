@@ -1,5 +1,6 @@
 #pragma once
 #include <Windows.h>
+#include "SyncPrimitives.h"
 
 class CBank;
 
@@ -17,7 +18,8 @@ private:
 
 private:
 	friend CBank;
-
+	HANDLE m_handle;
 	CBank *m_bank;
 	unsigned m_id;
+	SyncPrimitives *m_syncPrimitives = nullptr;
 };
