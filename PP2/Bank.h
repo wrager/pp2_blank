@@ -8,6 +8,7 @@
 class CBank
 {
 public:
+	CBank(TypeSyncPrimitives type);
 	CBank();
 	CBankClient* CreateClient();
 	void UpdateClientBalance(CBankClient& client, int value);
@@ -16,8 +17,11 @@ public:
 private:
 	std::vector<CBankClient> m_clients;
 	int m_totalBalance;
+
 	SyncPrimitives *m_syncPrimitives = nullptr;
+
+private:
 	int GetTotalBalance();
 	void SetTotalBalance(int value);
-	void SomeLongOperations();
+	void SomeLongOperations(CBankClient const & client);
 };

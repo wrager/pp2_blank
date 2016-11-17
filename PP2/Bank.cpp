@@ -49,6 +49,22 @@ void CBank::UpdateClientBalance(CBankClient &client, int value)
 
 }
 
+size_t CBank::GetClientsCount() const
+{
+	return m_clients.size();
+}
+
+HANDLE * CBank::GetClientsHandles() const
+{
+	std::vector<HANDLE> handles;
+
+	for (auto const& client : m_clients)
+	{
+		handles.push_back(client.m_handle);
+	}
+
+	return handles.data();
+}
 
 int CBank::GetTotalBalance()
 {
@@ -61,7 +77,7 @@ void CBank::SetTotalBalance(int value)
 	m_totalBalance = value;
 }
 
-void CBank::SomeLongOperations()
+void CBank::SomeLongOperations(CBankClient const &client)
 {
-	// TODO
+	Sleep((1000 + std::rand() % 3000) * (client.m_id + 1));
 }
