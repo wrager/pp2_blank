@@ -18,31 +18,30 @@ shared_ptr<CBankClient> CBank::CreateClient()
 	shared_ptr<CBankClient> client = make_shared<CBankClient>(this, clientId);
 	m_clients.push_back(*client);
 	m_threads.emplace_back(CreateThread(NULL, 0, &client->ThreadFunction, &*client, 0, NULL));
+	SetThreadPriority(m_threads.back(), THREAD_BASE_PRIORITY_MAX);
+
 	return client;
 }
 
 
 void CBank::UpdateClientBalance(CBankClient &client, int value)
 {
-	int totalBalance = GetTotalBalance();
-	std::cout << "Client " << client.GetId() << " initiates reading total balance. Total = " << totalBalance << "." << std::endl;
-	
+	int totalBalance = m_totalBalance;
+	std::cout << "Client " << client.GetId() << " initiates reading total balance. Total = " << m_totalBalance << "." << std::endl;
 	SomeLongOperations();
-	totalBalance += value;
-
 	std::cout
 		<< "Client " << client.GetId() << " updates his balance with " << value
-		<< " and initiates setting total balance to " << totalBalance
-		<< ". Must be: " << GetTotalBalance() + value << "." << std::endl;
+		<< " and initiates setting total balance to " << totalBalance + value
+		<< ". Must be: " << m_totalBalance + value << "." << std::endl;
 
 	// Check correctness of transaction through actual total balance
-	if (totalBalance < 0)
+	if (totalBalance + value > 0)
 	{
-		std::cout << "! ERROR !" << std::endl;
+		SetTotalBalance(m_totalBalance + value);
 	}
 	else
-	{ 
-		SetTotalBalance(totalBalance);
+	{
+		std::cout << "!ERROR!" << std::endl;
 	}
 }
 
