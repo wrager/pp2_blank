@@ -4,18 +4,32 @@
 
 using namespace std;
 
-int main()
+int main(int argc, char *argv[])
 {
-	PrimitivesCollection collection("mutex");
-	shared_ptr<CBank> bank = make_shared<CBank>(collection);
-	shared_ptr<CBankClient> client1 = bank->CreateClient();
-	shared_ptr<CBankClient> client2 = bank->CreateClient();
-	shared_ptr<CBankClient> client3 = bank->CreateClient();
-	shared_ptr<CBankClient> client4 = bank->CreateClient();
-	shared_ptr<CBankClient> client5 = bank->CreateClient();
-	shared_ptr<CBankClient> client6 = bank->CreateClient();
-	// TODO: WaitForMultipleObjects
-	bank->WaitForThreadsComplited();
+	if (argc > 1)
+	{
+		if (string(argv[1]) == "?")
+		{
+			std::cout << "pp2.exe <bankClientsNumber> <syncPrimitive>\n\tmutex\n\tsemaphore\n\tevent\n\tcritical_section\nif syncPrimitive don`t specified or incorrect, primitive won`t use";
+		}
+		else
+		{
+			int clientsCount = atoi(argv[1]);
 
-    return 0;
+			if (clientsCount > 0)
+			{
+
+				PrimitivesCollection collection(argc > 2 ? argv[2] : "");
+				shared_ptr<CBank> bank = make_shared<CBank>(clientsCount, collection);
+
+				//fixed TODO
+				bank->WaitForThreadsComplited();
+			}
+		}
+
+		return 0;
+	}
+
+	std::cout << "Error.\nUsage:pp2.exe <bankClientsNumber>\npp2.exe -? for help";
+    return 1;
 }

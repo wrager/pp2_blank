@@ -4,12 +4,16 @@
 const float SLEEP_TIME = 4.f;
 using namespace std;
 
-CBank::CBank(PrimitivesCollection & collection)
+CBank::CBank(int clientsCount, PrimitivesCollection & collection)
 	: m_clients()
 	, m_totalBalance(0)
 	, m_threads()
 	, m_primitives(collection)
 {
+	for (int i = 0; i < clientsCount; i++)
+	{
+		CreateClient();
+	}
 }
 
 
