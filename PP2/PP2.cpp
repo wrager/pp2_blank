@@ -6,7 +6,8 @@ using namespace std;
 
 int main()
 {
-	shared_ptr<CBank> bank = make_shared<CBank>();
+	PrimitivesCollection collection("mutex");
+	shared_ptr<CBank> bank = make_shared<CBank>(collection);
 	shared_ptr<CBankClient> client1 = bank->CreateClient();
 	shared_ptr<CBankClient> client2 = bank->CreateClient();
 	shared_ptr<CBankClient> client3 = bank->CreateClient();

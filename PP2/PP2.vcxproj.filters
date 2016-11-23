@@ -30,6 +30,9 @@
     <ClInclude Include="BankClient.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="SynchronizationPrimitives.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -42,6 +45,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="BankClient.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SynchronizationPrimitives.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

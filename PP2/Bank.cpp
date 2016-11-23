@@ -4,10 +4,11 @@
 const float SLEEP_TIME = 4.f;
 using namespace std;
 
-CBank::CBank()
+CBank::CBank(PrimitivesCollection & collection)
 	: m_clients()
 	, m_totalBalance(0)
 	, m_threads()
+	, m_primitives(collection)
 {
 }
 
@@ -18,7 +19,7 @@ shared_ptr<CBankClient> CBank::CreateClient()
 	shared_ptr<CBankClient> client = make_shared<CBankClient>(this, clientId);
 	m_clients.push_back(*client);
 	m_threads.emplace_back(CreateThread(NULL, 0, &client->ThreadFunction, &*client, 0, NULL));
-	SetThreadPriority(m_threads.back(), THREAD_BASE_PRIORITY_MAX);
+	SetThreadPriority(m_threads.back(), THREAD_BASE_PRIORITY_IDLE);
 
 	return client;
 }
@@ -26,6 +27,7 @@ shared_ptr<CBankClient> CBank::CreateClient()
 
 void CBank::UpdateClientBalance(CBankClient &client, int value)
 {
+	m_primitives.EnterPrimitiveZone();
 	int totalBalance = m_totalBalance;
 	std::cout << "Client " << client.GetId() << " initiates reading total balance. Total = " << m_totalBalance << "." << std::endl;
 	SomeLongOperations();
@@ -43,6 +45,7 @@ void CBank::UpdateClientBalance(CBankClient &client, int value)
 	{
 		std::cout << "!ERROR!" << std::endl;
 	}
+	m_primitives.LeavePrimitiveZone();
 }
 
 DWORD CBank::WaitForThreadsComplited()
