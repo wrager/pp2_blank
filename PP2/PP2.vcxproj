@@ -151,7 +151,9 @@
   <ItemGroup>
     <ClInclude Include="Bank.h" />
     <ClInclude Include="BankClient.h" />
+    <ClInclude Include="PrimitiveType.h" />
     <ClInclude Include="stdafx.h" />
+    <ClInclude Include="StreamHandler.h" />
     <ClInclude Include="SynchronizationPrimitives.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
@@ -160,6 +162,7 @@
     <ClCompile Include="BankClient.cpp" />
     <ClCompile Include="PP2.cpp" />
     <ClCompile Include="stdafx.cpp" />
+    <ClCompile Include="StreamHandler.cpp" />
     <ClCompile Include="SynchronizationPrimitives.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

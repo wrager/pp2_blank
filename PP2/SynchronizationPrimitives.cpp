@@ -1,21 +1,21 @@
 #include "stdafx.h"
 #include "SynchronizationPrimitives.h"
 
-PrimitivesCollection::PrimitivesCollection(const std::string & type)
+PrimitivesCollection::PrimitivesCollection(PrimitiveType type)
 {
-	if (type == "mutex")
+	if (type == PrimitiveType::Mutex)
 	{
 		mutex = CreateMutex(NULL, false, NULL);
 	}
-	else if (type == "semaphore")
+	else if (type == PrimitiveType::Mutex)
 	{
 		semaphore = CreateSemaphore(NULL, 1, 1, NULL);
 	}
-	else if (type == "event")
+	else if (type == PrimitiveType::Event)
 	{
 		event = CreateEvent(NULL, false, true, NULL);
 	}
-	else if (type == "critical_section")
+	else if (type == PrimitiveType::CriticalSection)
 	{
 		InitializeCriticalSection(&criticalSection.get());
 	}
@@ -43,7 +43,7 @@ void PrimitivesCollection::EnterPrimitiveZone()
 	{
 		WaitForSingleObject(mutex.get(), INFINITE);
 	}
-	else if (event.get())
+	else if (event)
 	{
 		WaitForSingleObject(event.get(), INFINITE);
 	}
@@ -63,7 +63,7 @@ void PrimitivesCollection::LeavePrimitiveZone()
 	{
 		ReleaseMutex(mutex.get());
 	}
-	else if (event.get())
+	else if (event)
 	{
 		SetEvent(event.get());
 	}

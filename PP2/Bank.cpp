@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "Bank.h"
 
-const float SLEEP_TIME = 4.f;
+const unsigned long SLEEP_TIME = 4;
 using namespace std;
 
 CBank::CBank(int clientsCount, PrimitivesCollection & collection)

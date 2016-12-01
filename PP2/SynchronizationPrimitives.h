@@ -1,11 +1,12 @@
 #pragma once
 #include <boost/optional.hpp>
 #include <Windows.h>
+#include "PrimitiveType.h"
 
 class PrimitivesCollection
 {
 public:
-	PrimitivesCollection(const std::string & type);
+	PrimitivesCollection(PrimitiveType type);
 	~PrimitivesCollection();
 
 	void EnterPrimitiveZone();
