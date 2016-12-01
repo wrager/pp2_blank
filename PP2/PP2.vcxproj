@@ -74,12 +74,16 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
+    <IncludePath>C:\sdk\boost_1_60_0;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\sdk\boost_1_60_0\stage\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
+    <IncludePath>C:\sdk\boost_1_60_0;C:\Users\НОУТБУК\Documents\Visual Studio 2015\Projects\Composing of figures editor\libs\SFML\x64\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\sdk\boost_1_60_0\libs;C:\Users\НОУТБУК\Documents\Visual Studio 2015\Projects\Composing of figures editor\libs\SFML\x64\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -147,7 +151,10 @@
   <ItemGroup>
     <ClInclude Include="Bank.h" />
     <ClInclude Include="BankClient.h" />
+    <ClInclude Include="PrimitiveType.h" />
     <ClInclude Include="stdafx.h" />
+    <ClInclude Include="StreamHandler.h" />
+    <ClInclude Include="SynchronizationPrimitives.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
@@ -155,6 +162,8 @@
     <ClCompile Include="BankClient.cpp" />
     <ClCompile Include="PP2.cpp" />
     <ClCompile Include="stdafx.cpp" />
+    <ClCompile Include="StreamHandler.cpp" />
+    <ClCompile Include="SynchronizationPrimitives.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,17 +1,36 @@
 #include "stdafx.h"
 #include "Bank.h"
 #include "BankClient.h"
+#include "StreamHandler.h"
 
-int main()
+using namespace std;
+
+int main(int argc, char *argv[])
 {
-	CBank* bank = new CBank();
-	CBankClient* client1 = bank->CreateClient();
-	CBankClient* client2 = bank->CreateClient();
-
-	// TODO: WaitForMultipleObjects
-	while (true)
+	if (argc > 1)
 	{
+		if (string(argv[1]) == "/?")
+		{
+			std::cout << "pp2.exe <bankClientsNumber> <syncPrimitive>\n\tmutex\n\tsemaphore\n\tevent\n\tcritical_section\nif syncPrimitive don`t specified or incorrect, primitive won`t use";
+		}
+		else
+		{
+			int clientsCount = atoi(argv[1]);
+
+			if (clientsCount > 0)
+			{
+
+				PrimitivesCollection collection(CStreamHandler::GetPrimitiveType(argc > 2 ? argv[2] : ""));
+				shared_ptr<CBank> bank = make_shared<CBank>(clientsCount, collection);
+
+				//fixed TODO
+				bank->WaitForThreadsComplited();
+			}
+		}
+
+		return 0;
 	}
 
-    return 0;
+	std::cout << "Error.\nUsage:pp2.exe <bankClientsNumber>\npp2.exe /? for help";
+    return 1;
 }
