@@ -24,6 +24,9 @@
     <ClInclude Include="targetver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="SyncPrimitives.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="Bank.h">
       <Filter>Header Files</Filter>
     </ClInclude>

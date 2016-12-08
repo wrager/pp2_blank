@@ -1,21 +1,25 @@
 #pragma once
-#include <Windows.h>
-
+#include "Bank.h"
 class CBank;
 
 class CBankClient
 {
 public:
-	unsigned GetId();
-
+	unsigned int GetId();
+	~CBankClient() = default;
 private:
-	CBankClient(CBank *bank, unsigned id);
-	static unsigned GetSleepDuration(CBankClient *client);
-	static unsigned GetBalanceChangeValue();
+	unsigned m_id;
+	CBank *m_bank;
+
+	CBankClient(CBank *bank, unsigned int id, SyncPrimitives *syncPrimitives);
+	
+	static unsigned int GetSleepDuration(CBankClient *client);
+	static unsigned int GetBalanceChangeValue();
 	static DWORD WINAPI ThreadFunction(LPVOID lpParam);
 
 	friend CBank;
 
-	CBank *m_bank;
-	unsigned m_id;
+private:
+	HANDLE m_handle;
+	SyncPrimitives *m_syncPrimitives = nullptr;
 };
