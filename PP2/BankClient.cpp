@@ -61,7 +61,6 @@ DWORD WINAPI CBankClient::ThreadFunction(LPVOID lpParam)
 
 unsigned CBankClient::GetSleepDuration(CBankClient *client)
 {
-
 	return (1000 + rand() % 3000) * (client->m_id + 1);
 }
 

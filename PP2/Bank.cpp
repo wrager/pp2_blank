@@ -30,7 +30,7 @@ void CBank::UpdateClientBalance(CBankClient &client, int value)
 	int totalBalance = GetTotalBalance();
 	std::cout << "Client " << client.GetId() << " initiates reading total balance. Total = " << totalBalance << "." << std::endl;
 	
-	SomeLongOperations();
+	SomeLongOperations(client);
 
 	std::cout
 		<< "Client " << client.GetId() << " updates his balance with " << value
